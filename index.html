@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArcShield • ABNT NBR 17227:2025 • Cálculo de Energia Incidente e Placas de Segurança</title>
+  <meta name="description" content="ArcShield: aplicação para cálculo de energia incidente, seleção de EPIs e geração de placas de advertência de arco elétrico conforme ABNT NBR 17227:2025 e NR-10.">
+  
+  <!-- Favicon do Raio ⚡ -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f172a'/%3E%3Cpolygon points='36,4 12,34 30,34 28,60 52,30 34,30' fill='%23f59e0b' stroke='%23fbbf24' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="alternate icon" href="favicon.svg" type="image/svg+xml">
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/app.min.css">
+</head>
+<body>
+
+  <!-- =======================================================================
+       Barra de Navegação Superior
+       ======================================================================= -->
+  <header class="app-navbar">
+    <div class="navbar-container">
+      <div class="brand-wrapper">
+        <div class="brand-logo-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="#ffffff">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <span class="brand-name">ArcShield</span>
+          <span class="brand-norma-tag">ABNT NBR 17227:2025 • NR-10</span>
+        </div>
+      </div>
+
+      <!-- Abas de Navegação -->
+      <nav class="nav-tabs" aria-label="Navegação da aplicação">
+        <button class="tab-btn active" data-tab="calculadora" id="btn-tab-calculadora">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="4" y="2" width="16" height="20" rx="2"/>
+            <line x1="8" y1="6" x2="16" y2="6"/>
+            <line x1="16" y1="14" x2="16" y2="18"/>
+            <path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"/>
+          </svg>
+          <span>Calculadora</span>
+        </button>
+
+        <button class="tab-btn" data-tab="tabela" id="btn-tab-tabela">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>
+          </svg>
+          <span>Estudo de Painéis</span>
+        </button>
+
+        <button class="tab-btn" data-tab="placas" id="btn-tab-placas">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 7h10v10H7z"/>
+            <path d="M7 3h10M7 21h10M3 7v10M21 7v10"/>
+          </svg>
+          <span>Estúdio de Placas</span>
+        </button>
+
+        <button class="tab-btn" data-tab="guia" id="btn-tab-guia">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          <span>Guia da Norma</span>
+        </button>
+
+        <button class="tab-btn" data-tab="ajuda" id="btn-tab-ajuda">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Central de Ajuda</span>
+        </button>
+      </nav>
+
+      <!-- Ações do Cabeçalho -->
+      <div class="navbar-actions">
+        <button class="btn-icon" id="theme-toggle-btn" title="Alternar Modo Escuro / Claro" aria-label="Alternar tema">
+          <span id="theme-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =======================================================================
+       Conteúdo Principal
+       ======================================================================= -->
+  <main class="app-main">
+
+    <!-- =====================================================================
+         ABA 1: CALCULADORA EM TEMPO REAL
+         ===================================================================== -->
+    <section class="tab-pane active" id="tab-calculadora">
+      <div class="calc-layout">
+        
+        <!-- Formulário de Entrada de Parâmetros -->
+        <div class="card calc-form-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+              <span>Parâmetros de Entrada da Instalação</span>
+            </h2>
+
+
+          </div>
+
+          <!-- Seletor C.A. Trifásico vs C.C. -->
+          <div class="system-type-bar" role="tablist">
+            <button type="button" class="system-type-btn active" data-type="ac_3p">
+              ⚡ Trifásico C.A. (208 V a 15 000 V)
+            </button>
+            <button type="button" class="system-type-btn" data-type="dc">
+              🔋 Corrente Contínua C.C. (até 1 500 Vcc)
+            </button>
+          </div>
+
+          <form id="calc-form" onsubmit="event.preventDefault();">
+            <div class="form-grid">
+              
+              <!-- Identificação -->
+              <div class="form-group">
+                <label class="form-label" for="input-tag">
+                  <span>TAG do Equipamento</span>
+                  <button type="button" class="param-help-btn" data-param-help="tag" title="Ajuda sobre TAG do Equipamento" aria-label="Ajuda sobre TAG do Equipamento">?</button>
+                </label>
+                <div class="input-wrapper">
+                  <input type="text" id="input-tag" class="form-input live-input" value="QGBT-01" placeholder="Ex: CCM-01, QGBT-01">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="input-desc">
+                  <span>Descrição / Local</span>
+                  <button type="button" class="param-help-btn" data-param-help="desc" title="Ajuda sobre Descrição / Local" aria-label="Ajuda sobre Descrição / Local">?</button>
+                </label>
+                <div class="input-wrapper">
+                  <input type="text" id="input-desc" class="form-input live-input" value="Quadro Geral de Baixa Tensão" placeholder="Ex: Subestação 01">
+                </div>
+              </div>
+
+              <!-- CAMPOS ESPECÍFICOS DE C.A. TRIFÁSICO -->
+              <div id="ac-specific-fields" style="display: contents;">
+                <div class="form-group">
+                  <label class="form-label" for="input-voc">
+                    <span>Tensão Nominal (Voc)</span>
+                    <button type="button" class="param-help-btn" data-param-help="voc" title="Ajuda sobre Tensão Nominal Voc" aria-label="Ajuda sobre Tensão Nominal Voc">?</button>
+                    <span class="form-hint">208 V - 15 kV</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="number" id="input-voc" class="form-input live-input has-suffix" value="380" min="208" max="15000" step="any">
+                    <span class="input-suffix">V</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="input-ibf">
+                    <span>Curto-Circuito Franco (Ibf)</span>
+                    <button type="button" class="param-help-btn" data-param-help="ibf" title="Ajuda sobre Curto-Circuito Franco Ibf" aria-label="Ajuda sobre Curto-Circuito Franco Ibf">?</button>
+                    <span class="form-hint">Falta Trifásica</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="number" id="input-ibf" class="form-input live-input has-suffix" value="25.0" min="0.2" max="106" step="0.1">
+                    <span class="input-suffix">kA</span>
+                  </div>
+                </div>
+
+                <!-- Tempo de Atuação Nominal e Reduzido -->
+                <div class="form-group">
+                  <label class="form-label" for="input-time">
+                    <span>Tempo de Eliminação (T)</span>
+                    <button type="button" class="param-help-btn" data-param-help="time" title="Ajuda sobre Tempo de Eliminação T" aria-label="Ajuda sobre Tempo de Eliminação T">?</button>
+                    <span class="form-hint">Corrente Nominal</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="number" id="input-time" class="form-input live-input has-suffix" value="0.08" min="0.01" max="10" step="0.001">
+                    <span class="input-suffix">s</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="input-reduced-time">
+                    <span>Tempo para Iarc Mínima</span>
+                    <button type="button" class="param-help-btn" data-param-help="reduced-time" title="Ajuda sobre Tempo para Iarc Mínima" aria-label="Ajuda sobre Tempo para Iarc Mínima">?</button>
+                    <span class="form-hint">Curva do Disjuntor</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="number" id="input-reduced-time" class="form-input live-input has-suffix" value="0.08" min="0.01" max="10" step="0.001" disabled>
+                    <span class="input-suffix">s</span>
+                  </div>
+                  <label style="font-size: 0.72rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.35rem; margin-top: 0.25rem;">
+                    <input type="checkbox" id="sync-reduced-time" checked> Usar mesmo tempo da corrente nominal
+                  </label>
+                </div>
+
+                <!-- Configuração dos Eletrodos (Item 5.1.6 da NBR 17227) -->
+                <div class="form-group col-span-2">
+                  <label class="form-label">
+                    <span>Configuração dos Eletrodos (Tabela 2)</span>
+                    <button type="button" class="param-help-btn" data-param-help="electrodes" title="Ajuda sobre Configuração dos Eletrodos" aria-label="Ajuda sobre Configuração dos Eletrodos">?</button>
+                    <span class="form-hint">Arranjo físico dos condutores</span>
+                  </label>
+                  <input type="hidden" id="electrode-config-hidden" value="VCB">
+                  
+                  <div class="electrode-grid">
+                    <div class="electrode-card selected" data-config="VCB" title="VCB: Eletrodos verticais dentro de invólucro metálico">
+                      <div class="electrode-diagram">
+                        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="4" y="4" width="32" height="32" rx="2" stroke="#64748b"/>
+                          <line x1="14" y1="8" x2="14" y2="28" stroke="#38bdf8" stroke-width="2.5"/>
+                          <line x1="20" y1="8" x2="20" y2="28" stroke="#38bdf8" stroke-width="2.5"/>
+                          <line x1="26" y1="8" x2="26" y2="28" stroke="#38bdf8" stroke-width="2.5"/>
+                        </svg>
+                      </div>
+                      <div class="electrode-code">VCB</div>
+                      <div class="electrode-name">Vertical Caixa</div>
+                    </div>
+
+                    <div class="electrode-card" data-config="VCBB" title="VCBB: Eletrodos verticais com barreira isolante no invólucro">
+                      <div class="electrode-diagram">
+                        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="4" y="4" width="32" height="32" rx="2" stroke="#64748b"/>
+                          <line x1="14" y1="8" x2="14" y2="24" stroke="#f59e0b" stroke-width="2.5"/>
+                          <line x1="20" y1="8" x2="20" y2="24" stroke="#f59e0b" stroke-width="2.5"/>
+                          <line x1="26" y1="8" x2="26" y2="24" stroke="#f59e0b" stroke-width="2.5"/>
+                          <line x1="10" y1="28" x2="30" y2="28" stroke="#ef4444" stroke-width="3"/>
+                        </svg>
+                      </div>
+                      <div class="electrode-code">VCBB</div>
+                      <div class="electrode-name">Vertical Barreira</div>
+                    </div>
+
+                    <div class="electrode-card" data-config="HCB" title="HCB: Eletrodos horizontais dentro de invólucro metálico">
+                      <div class="electrode-diagram">
+                        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="4" y="4" width="32" height="32" rx="2" stroke="#64748b"/>
+                          <line x1="8" y1="14" x2="28" y2="14" stroke="#10b981" stroke-width="2.5"/>
+                          <line x1="8" y1="20" x2="28" y2="20" stroke="#10b981" stroke-width="2.5"/>
+                          <line x1="8" y1="26" x2="28" y2="26" stroke="#10b981" stroke-width="2.5"/>
+                        </svg>
+                      </div>
+                      <div class="electrode-code">HCB</div>
+                      <div class="electrode-name">Horizontal Caixa</div>
+                    </div>
+
+                    <div class="electrode-card" data-config="VOA" title="VOA: Eletrodos verticais ao ar livre">
+                      <div class="electrode-diagram">
+                        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="14" y1="8" x2="14" y2="32" stroke="#38bdf8" stroke-width="2.5"/>
+                          <line x1="20" y1="8" x2="20" y2="32" stroke="#38bdf8" stroke-width="2.5"/>
+                          <line x1="26" y1="8" x2="26" y2="32" stroke="#38bdf8" stroke-width="2.5"/>
+                        </svg>
+                      </div>
+                      <div class="electrode-code">VOA</div>
+                      <div class="electrode-name">Vertical Ar Livre</div>
+                    </div>
+
+                    <div class="electrode-card" data-config="HOA" title="HOA: Eletrodos horizontais ao ar livre">
+                      <div class="electrode-diagram">
+                        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="8" y1="14" x2="32" y2="14" stroke="#10b981" stroke-width="2.5"/>
+                          <line x1="8" y1="20" x2="32" y2="20" stroke="#10b981" stroke-width="2.5"/>
+                          <line x1="8" y1="26" x2="32" y2="26" stroke="#10b981" stroke-width="2.5"/>
+                        </svg>
+                      </div>
+                      <div class="electrode-code">HOA</div>
+                      <div class="electrode-name">Horiz. Ar Livre</div>
+                    </div>
+                  </div>
+
+                  <!-- Espaçamento Típico da Norma (posicionado após eletrodos) -->
+                  <div class="typical-spacing-bar" style="margin-top: 1rem; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+                    <label class="form-label" for="preset-select" style="margin-bottom: 0.4rem; font-size: 0.8rem;">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px;">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <path d="M3 9h18M9 21V9"/>
+                      </svg>
+                      <span>Espaçamento Típico da Norma</span>
+                      <button type="button" class="param-help-btn" data-param-help="preset" title="Ajuda sobre Espaçamentos Típicos da Norma" aria-label="Ajuda sobre Espaçamentos Típicos da Norma">?</button>
+                      <span class="form-hint" style="display:inline; margin-left:6px;">Preenche apenas dimensões físicas (não altera tensão)</span>
+                    </label>
+                    <select class="form-select" id="preset-select" title="Selecionar espaçamentos físicos típicos da norma conforme tipo de invólucro">
+                      <option value="">📐 Selecione o tipo de invólucro / compartimento...</option>
+                    </select>
+                  </div>
+                </div>
+
+
+                <!-- Espaçamento entre barramentos (Gap G) e Distância de Trabalho -->
+                <div class="form-group">
+                  <label class="form-label" for="input-gap">
+                    <span>Espaçamento entre Eletrodos (Gap G)</span>
+                    <button type="button" class="param-help-btn" data-param-help="gap" title="Ajuda sobre Gap entre Eletrodos" aria-label="Ajuda sobre Gap entre Eletrodos">?</button>
+                    <span class="form-hint">Tabela 1</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="number" id="input-gap" class="form-input live-input has-suffix" value="25.0" min="6.35" max="254" step="0.5">
+                    <span class="input-suffix">mm</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="input-working-dist">
+                    <span>Distância de Trabalho (D)</span>
+                    <button type="button" class="param-help-btn" data-param-help="working-dist" title="Ajuda sobre Distância de Trabalho D" aria-label="Ajuda sobre Distância de Trabalho D">?</button>
+                    <span class="form-hint">Tabela 3</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="number" id="input-working-dist" class="form-input live-input has-suffix" value="457.2" min="305" max="3000" step="1">
+                    <span class="input-suffix">mm</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- CAMPOS ESPECÍFICOS DE C.C. (CORRENTE CONTÍNUA) -->
+              <div id="dc-specific-fields" style="display: none;">
+                <div class="form-group">
+                  <label class="form-label" for="input-dc-voc">
+                    <span>Tensão da Fonte C.C.</span>
+                    <button type="button" class="param-help-btn" data-param-help="dc-voc" title="Ajuda sobre Tensão C.C." aria-label="Ajuda sobre Tensão C.C.">?</button>
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="number" id="input-dc-voc" class="form-input live-input has-suffix" value="125" min="12" max="1500" step="any">
+                    <span class="input-suffix">V</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="input-dc-icc">
+                    <span>Curto-Circuito C.C. (Icc)</span>
+                    <button type="button" class="param-help-btn" data-param-help="dc-icc" title="Ajuda sobre Curto C.C." aria-label="Ajuda sobre Curto C.C.">?</button>
+                  </label>
+                  <div class="input-wrapper">
+                    <input type="number" id="input-dc-icc" class="form-input live-input has-suffix" value="10.0" min="0.5" max="100" step="0.5">
+                    <span class="input-suffix">kA</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="input-dc-enclosure">Configuração C.C.</label>
+                  <select id="input-dc-enclosure" class="form-select live-input">
+                    <option value="closed">Fechado (Painel Enclausurado)</option>
+                    <option value="open">Aberto (Ao Ar Livre)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="input-dc-type">Tipo de Equipamento C.C.</label>
+                  <select id="input-dc-type" class="form-select live-input">
+                    <option value="panel">Painel Elétrico (a=100mm, k=0.127)</option>
+                    <option value="swg_bt">Conjunto de Manobra BT (a=400mm, k=0.312)</option>
+                    <option value="swg_mt">Conjunto de Manobra MT (a=950mm, k=0.416)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Dimensões do Invólucro (Item 5.1.5 e 5.2.8) -->
+              <div class="form-group col-span-2" id="enclosure-section">
+                <label class="form-label">
+                  <span>Dimensões do Invólucro do Compartimento</span>
+                  <button type="button" class="param-help-btn" data-param-help="enclosure" title="Ajuda sobre Dimensões do Invólucro e Fator CF" aria-label="Ajuda sobre Dimensões do Invólucro">?</button>
+                  <span class="form-hint">Largura x Altura x Profundidade (mm)</span>
+                </label>
+                <div class="dimensions-grid">
+                  <div class="input-wrapper">
+                    <input type="number" id="input-width" class="form-input enc-input live-input has-suffix" value="508" placeholder="Largura">
+                    <span class="input-suffix">L (mm)</span>
+                  </div>
+                  <div class="input-wrapper">
+                    <input type="number" id="input-height" class="form-input enc-input live-input has-suffix" value="508" placeholder="Altura">
+                    <span class="input-suffix">A (mm)</span>
+                  </div>
+                  <div class="input-wrapper">
+                    <input type="number" id="input-depth" class="form-input enc-input live-input has-suffix" value="508" placeholder="Profundidade">
+                    <span class="input-suffix">P (mm)</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Botões de Ação do Formulário -->
+            <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+              <button type="button" class="btn btn-primary" id="btn-add-to-study" style="flex: 2;">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+                <span>Salvar / Adicionar ao Estudo</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Painel de Resultados Reativos (Direita) -->
+        <div class="results-panel">
+          
+          <!-- Hero Card de Energia Incidente -->
+          <div class="energy-hero-card" id="energy-hero-card">
+            <div class="hero-subtitle">Energia Incidente Resultante (Pior Cenário)</div>
+            
+            <div class="hero-energy-value">
+              <span id="hero-energy-val">0.00</span>
+              <span class="hero-energy-unit">cal/cm²</span>
+            </div>
+
+            <div class="hero-energy-joules" id="hero-energy-joules">0.0 J/cm²</div>
+
+            <!-- Barra de Escala de Perigo -->
+            <div class="hazard-meter-wrapper">
+              <div class="hazard-scale-bar">
+                <div class="scale-segment seg-0" title="Risco Residual: < 1.2 cal/cm²"></div>
+                <div class="scale-segment seg-1" title="Categoria 1: 1.2 a 4.0 cal/cm²"></div>
+                <div class="scale-segment seg-2" title="Categoria 2: 4.1 a 8.0 cal/cm²"></div>
+                <div class="scale-segment seg-3" title="Categoria 3: 8.1 a 25.0 cal/cm²"></div>
+                <div class="scale-segment seg-4" title="Categoria 4: 25.1 a 40.0 cal/cm²"></div>
+                <div class="scale-segment seg-extreme" title="Perigo Extremo: > 40 cal/cm²"></div>
+              </div>
+              <div class="scale-labels">
+                <span>0</span>
+                <span>1.2</span>
+                <span>4.0</span>
+                <span>8.0</span>
+                <span>25</span>
+                <span>40+ cal/cm²</span>
+              </div>
+            </div>
+
+            <div class="hero-badge-wrap">
+              <span class="badge" id="hero-ppe-badge" style="font-size: 0.85rem; padding: 0.4rem 1rem;">
+                Categoria 1
+              </span>
+            </div>
+          </div>
+
+          <!-- Métricas Críticas em Grade -->
+          <div class="metrics-card-grid">
+            <div class="metric-box">
+              <span class="metric-box-label">Fronteira de Arco (DLA/AFB)</span>
+              <div class="metric-box-val" id="res-afb">0.00 <span class="unit">m</span></div>
+              <span class="metric-box-sub">Limite de aproximação segura</span>
+            </div>
+
+            <div class="metric-box">
+              <span class="metric-box-label">Corrente de Arco (Iarc)</span>
+              <div class="metric-box-val" id="res-iarc">0.00 <span class="unit">kA</span></div>
+              <span class="metric-box-sub">Corrente nominal limitada</span>
+            </div>
+
+            <div class="metric-box">
+              <span class="metric-box-label">Corrente Reduzida (Iarc min)</span>
+              <div class="metric-box-val" id="res-iarc-min">0.00 <span class="unit">kA</span></div>
+              <span class="metric-box-sub">Calculada com VarCf</span>
+            </div>
+
+            <div class="metric-box">
+              <span class="metric-box-label">Fator Invólucro (CF)</span>
+              <div class="metric-box-val" id="res-cf">1.000</div>
+              <span class="metric-box-sub">Correção de confinamento</span>
+            </div>
+          </div>
+
+          <!-- Comparação dos Dois Cenários (Nominal vs Reduzida) -->
+          <div class="scenario-compare-card">
+            <div class="scenario-title">
+              <span>Comparação dos Cenários de Arco (Item 5.2.11 da Norma)</span>
+            </div>
+            <div class="scenario-grid">
+              <div class="scenario-item" id="scenario-nominal">
+                <span class="governing-badge" id="nom-badge">GOVERNANTE</span>
+                <div class="scenario-header">Cenário 1: Corrente Nominal</div>
+                <div class="scenario-row"><span>Energia:</span> <strong id="nom-energy">0.00 cal/cm²</strong></div>
+                <div class="scenario-row"><span>Fronteira AFB:</span> <strong id="nom-afb">0.00 m</strong></div>
+              </div>
+
+              <div class="scenario-item" id="scenario-reduced">
+                <span class="governing-badge" id="red-badge">GOVERNANTE</span>
+                <div class="scenario-header">Cenário 2: Corrente Reduzida</div>
+                <div class="scenario-row"><span>Energia:</span> <strong id="red-energy">0.00 cal/cm²</strong></div>
+                <div class="scenario-row"><span>Fronteira AFB:</span> <strong id="red-afb">0.00 m</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Réguas de Choque Elétrico (NR-10) -->
+          <div class="shock-card">
+            <div class="scenario-title">
+              <span>Limites de Choque Elétrico (NR-10 / NBR 16384)</span>
+            </div>
+            
+            <div class="shock-ruler">
+              <div class="ruler-risk">Risco</div>
+              <div class="ruler-controlled">Controlada</div>
+              <div class="ruler-free">Zona Livre</div>
+            </div>
+
+            <div class="shock-legend">
+              <div>Zona de Risco: <strong id="shock-risk-dist">0.20 m</strong></div>
+              <div>Zona Controlada: <strong id="shock-ctrl-dist">0.70 m</strong></div>
+              <div>Luva Isolante: <strong id="shock-glove-class">Classe 00</strong></div>
+            </div>
+          </div>
+
+          <!-- Alertas de Limites Normativos -->
+          <div id="calc-warnings-box" class="alert-box alert-warning" style="display: none;"></div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         ABA 2: ESTUDO E TABELA DE PAINÉIS DO PROJETO
+         ===================================================================== -->
+    <section class="tab-pane" id="tab-tabela">
+      
+      <!-- Cartões de KPI do Projeto -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap icon-blue">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M3 9h18M9 21V9"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Equipamentos Cadastrados</span>
+            <span class="kpi-value" id="kpi-total-equip">0</span>
+            <span class="kpi-sub">Total no projeto</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap icon-amber">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Pior Caso (Maior Energia)</span>
+            <span class="kpi-value" id="kpi-worst-energy">0.0 cal/cm²</span>
+            <span class="kpi-sub" id="kpi-worst-tag">-</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap icon-green">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 14 14"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Energia Média</span>
+            <span class="kpi-value" id="kpi-avg-energy">0.0 cal/cm²</span>
+            <span class="kpi-sub">Todos os barramentos</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrap icon-red">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Perigo Extremo (&gt;40 cal/cm²)</span>
+            <span class="kpi-value" id="kpi-extreme-count">0</span>
+            <span class="kpi-sub">Desenergização obrigatória</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Ferramentas e Filtros -->
+      <div class="table-toolbar">
+        <div class="toolbar-left">
+          <div class="search-input-wrap">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" class="form-input" id="table-search-input" placeholder="Buscar por TAG ou descrição...">
+          </div>
+
+          <select class="form-select" id="table-filter-select" style="max-width: 220px;">
+            <option value="all">Todas as Categorias</option>
+            <option value="bt">Baixa Tensão (≤ 1 000 V)</option>
+            <option value="mt">Média Tensão (&gt; 1 000 V)</option>
+            <option value="cat_1">Categoria 1 (≤ 4 cal/cm²)</option>
+            <option value="cat_2">Categoria 2 (≤ 8 cal/cm²)</option>
+            <option value="cat_3">Categoria 3 (≤ 25 cal/cm²)</option>
+            <option value="cat_4">Categoria 4 (≤ 40 cal/cm²)</option>
+            <option value="prohibited">Perigo Extremo (&gt; 40 cal/cm²)</option>
+          </select>
+        </div>
+
+        <div class="toolbar-right">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-load-samples" title="Carregar casos típicos da indústria brasileira">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            <span>Carregar Exemplos</span>
+          </button>
+
+          <button type="button" class="btn btn-success" id="btn-export-excel" title="Exportar tabela completa com fórmulas para planilha em Excel">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="8" y1="13" x2="16" y2="17"/>
+              <line x1="16" y1="13" x2="8" y2="17"/>
+            </svg>
+            <span>Exportar para Excel (.xlsx)</span>
+          </button>
+
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-clear-study" title="Limpar todos os equipamentos">
+            <span>Limpar</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tabela Responsiva de Equipamentos -->
+      <div class="table-responsive">
+        <table class="data-table" id="equipment-data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>TAG / Equipamento</th>
+              <th>Tensão Voc</th>
+              <th>Falta Ibf</th>
+              <th>Tempo</th>
+              <th>Config.</th>
+              <th>Distância</th>
+              <th>Iarc</th>
+              <th>Energia Incidente</th>
+              <th>Fronteira (AFB)</th>
+              <th>Categoria EPI</th>
+              <th style="text-align: center;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="equipment-table-body">
+            <!-- Linhas geradas dinamicamente via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- =====================================================================
+         ABA 3: ESTÚDIO DE PLACAS & ETIQUETAS (SEÇÃO 7 NBR 17227:2025)
+         ===================================================================== -->
+    <section class="tab-pane" id="tab-placas">
+      <div class="label-studio-wrap">
+        
+        <!-- Controles de Configuração da Placa -->
+        <div class="card label-controls-card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 7h10v10H7z"/><path d="M7 3h10M7 21h10M3 7v10M21 7v10"/>
+              </svg>
+              <span>Personalização da Placa</span>
+            </h3>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="label-equip-select">Selecione o Equipamento</label>
+            <select class="form-select" id="label-equip-select">
+              <!-- Preenchido dinamicamente com os equipamentos do projeto -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="meta-company">Empresa / Unidade Fabril</label>
+            <input type="text" class="form-input" id="meta-company" value="Indústria & Energia Ltda.">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="meta-engineer">Responsável Técnico</label>
+            <input type="text" class="form-input" id="meta-engineer" value="Eng. Eletricista Responsável">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="meta-crea">Registro Profissional (CREA/RNP)</label>
+            <input type="text" class="form-input" id="meta-crea" value="CREA / RNP: 12345678-9">
+          </div>
+
+          <!-- Configuração de Logos -->
+          <div class="logo-config-section">
+            <div class="logo-config-title">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="5" rx="1"/><path d="M3 12h18M3 19h18"/></svg>
+              Logomarcas na Placa
+            </div>
+
+            <div class="logo-same-company-toggle">
+              <label class="toggle-label" for="logo-same-company">
+                <input type="checkbox" id="logo-same-company" checked>
+                <span class="toggle-text">A empresa que faz o estudo é a própria dona do equipamento (1 logo)</span>
+              </label>
+            </div>
+
+            <!-- Logo única (quando mesmo dono) -->
+            <div id="logo-single-group">
+              <label class="form-label" style="margin-top:0.5rem; font-size:0.78rem;">Logomarca da Empresa</label>
+              <div class="logo-drop-zone" id="logo-owner-drop">
+                <div class="logo-drop-inner">
+                  <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                  <span>Clique ou arraste a imagem aqui</span>
+                  <small>PNG, JPG ou SVG • Máx. 2 MB</small>
+                </div>
+                <img class="logo-preview" id="logo-owner-preview" src="" alt="" style="display:none;">
+                <input type="file" class="logo-file-input" id="logo-owner-file" accept="image/*">
+              </div>
+              <button type="button" class="btn-clear-logo" id="btn-clear-owner-logo" style="display:none;">✕ Remover logo</button>
+            </div>
+
+            <!-- Dois logos (quando empresas distintas) -->
+            <div id="logo-dual-group" style="display:none;">
+              <div class="dual-logo-row">
+                <div class="dual-logo-col">
+                  <label class="form-label" style="margin-top:0.5rem; font-size:0.78rem;">Logo da Proprietária</label>
+                  <div class="logo-drop-zone" id="logo-owner2-drop">
+                    <div class="logo-drop-inner">
+                      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                      <span>Proprietária</span>
+                    </div>
+                    <img class="logo-preview" id="logo-owner2-preview" src="" alt="" style="display:none;">
+                    <input type="file" class="logo-file-input" id="logo-owner2-file" accept="image/*">
+                  </div>
+                  <button type="button" class="btn-clear-logo" id="btn-clear-owner2-logo" style="display:none;">✕ Remover</button>
+                </div>
+                <div class="dual-logo-col">
+                  <label class="form-label" style="margin-top:0.5rem; font-size:0.78rem;">Logo da Executora (Estudo)</label>
+                  <div class="logo-drop-zone" id="logo-contractor-drop">
+                    <div class="logo-drop-inner">
+                      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                      <span>Executora</span>
+                    </div>
+                    <img class="logo-preview" id="logo-contractor-preview" src="" alt="" style="display:none;">
+                    <input type="file" class="logo-file-input" id="logo-contractor-file" accept="image/*">
+                  </div>
+                  <button type="button" class="btn-clear-logo" id="btn-clear-contractor-logo" style="display:none;">✕ Remover</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="label-actions-group" style="display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.85rem;">
+            <button type="button" class="btn btn-primary" id="btn-print-label">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 6 2 18 2 18 9"/>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                <rect x="6" y="14" width="12" height="8"/>
+              </svg>
+              <span>Imprimir Esta Placa (100x150 mm)</span>
+            </button>
+
+            <button type="button" class="btn btn-amber" id="btn-export-png">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+              </svg>
+              <span>Baixar Imagem PNG (300 DPI)</span>
+            </button>
+
+            <button type="button" class="btn btn-secondary" id="btn-print-all">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              </svg>
+              <span>Imprimir Todas as Placas do Estudo</span>
+            </button>
+          </div>
+
+          <div style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; margin-top: 0.5rem;">
+            💡 <strong>Padrão Industrial:</strong> As dimensões e cores seguem rigorosamente a Seção 7 da ABNT NBR 17227:2025 e ANSI Z535 para visibilidade além do limite seguro de aproximação.
+          </div>
+        </div>
+
+        <!-- Palco de Visualização em Escala Real -->
+        <div class="label-preview-stage">
+          <div id="label-render-stage">
+            <!-- Placa renderizada dinamicamente pelo LabelGenerator -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         ABA 4: GUIA E CONSULTA DA NORMA ABNT NBR 17227:2025
+         ===================================================================== -->
+    <section class="tab-pane" id="tab-guia">
+      <div class="guide-container">
+        
+        <!-- Hero da Norma -->
+        <div class="guide-hero">
+          <div class="guide-hero-text">
+            <h2>ABNT NBR 17227:2025</h2>
+            <p>
+              Primeira edição oficial publicada em <strong>27.05.2025</strong> pelo Comitê Brasileiro de Eletricidade (ABNT/CB-003). 
+              Estabelece os métodos de cálculo de energia incidente, gerenciamento de risco de arco elétrico e especificações de precauções e vestimentas de proteção individual (EPI) para instalações industriais e de potência no Brasil.
+            </p>
+          </div>
+          <div class="guide-hero-badge">
+            <span class="edition">1ª Edição Oficial</span>
+            <div class="standard-code">NBR 17227</div>
+            <span class="date">Maio de 2025</span>
+          </div>
+        </div>
+
+        <!-- Accordions com as Seções da Norma -->
+        <div class="guide-accordion">
+          
+          <!-- Seção 1: Processo em 10 Passos -->
+          <div class="accordion-item open">
+            <div class="accordion-header">
+              <h3>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 11 12 14 22 4"/>
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                </svg>
+                <span>Processo para a Realização da Análise de Energia Incidente (Seção 5.1)</span>
+              </h3>
+              <span class="acc-icon">▼</span>
+            </div>
+            <div class="accordion-body">
+              <p>A norma estipula uma sequência rigorosa de 10 passos para o estudo de energia incidente:</p>
+              
+              <div class="steps-grid">
+                <div class="step-card">
+                  <div class="step-num">1</div>
+                  <div class="step-info">
+                    <h4>Levantamento dos Dados do Sistema</h4>
+                    <p>Esquemas unifilares, cabos, geradores, transformadores e dados de campo atualizados.</p>
+                  </div>
+                </div>
+
+                <div class="step-card">
+                  <div class="step-num">2</div>
+                  <div class="step-info">
+                    <h4>Determinação do Modo de Operação</h4>
+                    <p>Cenários normais, manutenção, gerador em ilha, motores e concessionária.</p>
+                  </div>
+                </div>
+
+                <div class="step-card">
+                  <div class="step-num">3</div>
+                  <div class="step-info">
+                    <h4>Cálculo da Corrente de Falta Franca</h4>
+                    <p>Correntes de curto-circuito simétricas trifásicas (Ibf) conforme IEC 62909 ou IEEE 3002.3.</p>
+                  </div>
+                </div>
+
+                <div class="step-card">
+                  <div class="step-num">4</div>
+                  <div class="step-info">
+                    <h4>Espaçamento entre Fases e Tamanho do Invólucro</h4>
+                    <p>Gap (G) e dimensões AxLxP dos compartimentos (Tabela 1).</p>
+                  </div>
+                </div>
+
+                <div class="step-card">
+                  <div class="step-num">5</div>
+                  <div class="step-info">
+                    <h4>Configuração dos Eletrodos</h4>
+                    <p>Identificação entre VCB, VCBB, HCB, VOA e HOA (Tabela 2).</p>
+                  </div>
+                </div>
+
+                <div class="step-card">
+                  <div class="step-num">6</div>
+                  <div class="step-info">
+                    <h4>Determinação das Distâncias de Trabalho</h4>
+                    <p>Distância do torso/cabeça do trabalhador ao ponto provável de arco (Tabela 3).</p>
+                  </div>
+                </div>
+
+                <div class="step-card">
+                  <div class="step-num">7</div>
+                  <div class="step-info">
+                    <h4>Cálculo da Corrente de Arco Trifásica</h4>
+                    <p>Cálculo da Iarc nominal e da corrente reduzida (Iarc_min) com VarCf.</p>
+                  </div>
+                </div>
+
+                <div class="step-card">
+                  <div class="step-num">8</div>
+                  <div class="step-info">
+                    <h4>Tempo de Eliminação do Arco</h4>
+                    <p>Tempo de abertura dos disjuntores, relés, temporizadores e fontes de atraso.</p>
+                  </div>
+                </div>
+
+                <div class="step-card">
+                  <div class="step-num">9</div>
+                  <div class="step-info">
+                    <h4>Cálculo da Energia Incidente</h4>
+                    <p>Cálculo para a corrente nominal e reduzida, adotando-se o maior valor.</p>
+                  </div>
+                </div>
+
+                <div class="step-card">
+                  <div class="step-num">10</div>
+                  <div class="step-info">
+                    <h4>Determinação da Fronteira de Arco (DLA / AFB)</h4>
+                    <p>Distância em que a energia atinge o limiar de 1,2 cal/cm² (5,0 J/cm²).</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção 2: Configurações de Eletrodos -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <h3>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                <span>Configurações dos Eletrodos (Item 5.1.6 e Tabela 2)</span>
+              </h3>
+              <span class="acc-icon">▼</span>
+            </div>
+            <div class="accordion-body">
+              <p>A física do arco elétrico e a projeção do plasma térmico dependem criticamente do alinhamento dos barramentos condutores:</p>
+              
+              <div class="electrodes-reference-grid">
+                <div class="el-ref-card">
+                  <div class="el-ref-code">VCB</div>
+                  <div class="el-ref-title">Vertical na Caixa</div>
+                  <div class="el-ref-desc">Eletrodos dispostos verticalmente dentro de invólucro metálico. O arco é empurrado em direção ao fundo.</div>
+                </div>
+
+                <div class="el-ref-card">
+                  <div class="el-ref-code">VCBB</div>
+                  <div class="el-ref-title">Vertical com Barreira</div>
+                  <div class="el-ref-desc">Eletrodos verticais terminados em barreira isolante. O arco não pode se mover para baixo e é direcionado para a abertura.</div>
+                </div>
+
+                <div class="el-ref-card">
+                  <div class="el-ref-code">HCB</div>
+                  <div class="el-ref-title">Horizontal na Caixa</div>
+                  <div class="el-ref-desc">Eletrodos horizontais direcionados para a frente do painel. Plasma térmico é projetado diretamente contra o operador.</div>
+                </div>
+
+                <div class="el-ref-card">
+                  <div class="el-ref-code">VOA</div>
+                  <div class="el-ref-title">Vertical Ar Livre</div>
+                  <div class="el-ref-desc">Eletrodos verticais ao ar livre, sem confinamento por paredes metálicas (ex: barramento aéreo).</div>
+                </div>
+
+                <div class="el-ref-card">
+                  <div class="el-ref-code">HOA</div>
+                  <div class="el-ref-title">Horizontal Ar Livre</div>
+                  <div class="el-ref-desc">Eletrodos horizontais em ambiente aberto, com projeção direta de calor no eixo dos condutores.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção 3: Seleção de EPIs -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <h3>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>Equipamentos de Proteção Individual (Seção 6 e Tabelas 11 e 12)</span>
+              </h3>
+              <span class="acc-icon">▼</span>
+            </div>
+            <div class="accordion-body">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Faixa de Energia</th>
+                      <th>Classificação</th>
+                      <th>Vestimenta Principal</th>
+                      <th>Proteção Facial e Cabeça</th>
+                      <th>Luvas</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>&lt; 1,2 cal/cm²</td>
+                      <td><span class="badge badge-green">Risco Residual</span></td>
+                      <td>Algodão 100% manga longa ou tecido resistente a chama</td>
+                      <td>Óculos de segurança com proteção lateral e capacete Classe B</td>
+                      <td>Luvas de couro mecânicas</td>
+                    </tr>
+                    <tr>
+                      <td>1,2 a 12 cal/cm²</td>
+                      <td><span class="badge badge-amber">Tabela 11</span></td>
+                      <td>Vestimenta anti-arco para tronco e membros com ATPV ≥ energia estimada</td>
+                      <td>Protetor facial anti-arco com balaclava de proteção térmica</td>
+                      <td>Luvas de proteção térmica ou isolantes com sobreluva de couro</td>
+                    </tr>
+                    <tr>
+                      <td>&gt; 12 cal/cm² até 40 cal/cm²</td>
+                      <td><span class="badge badge-orange">Tabela 12</span></td>
+                      <td>Traje de manobra ("Arc Flash Suit" / conjunto jaqueta + calça multicamadas)</td>
+                      <td>Capuz-carrasco completo ("Arc Flash Hood") com visor panorâmico</td>
+                      <td>Luvas resistentes ao arco elétrico e luvas de borracha isolantes</td>
+                    </tr>
+                    <tr>
+                      <td>&gt; 40 cal/cm²</td>
+                      <td><span class="badge badge-extreme">PERIGO EXTREMO</span></td>
+                      <td colspan="3" style="color: #ef4444; font-weight: 700;">
+                        TRABALHO ENERGIZADO TERMINANTEMENTE PROIBIDO. Desenergização e bloqueio LOTO obrigatórios.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seção 4: Sinalização e Placas -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <h3>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 7h10v10H7z"/><path d="M7 3h10M7 21h10M3 7v10M21 7v10"/>
+                </svg>
+                <span>Requisitos de Sinalização e Etiquetas (Seção 7 da NBR 17227:2025)</span>
+              </h3>
+              <span class="acc-icon">▼</span>
+            </div>
+            <div class="accordion-body">
+              <p>O item 7.2 da norma estipula os requisitos mínimos indispensáveis para qualquer sinalização de arco elétrico:</p>
+              <ul style="margin: 0.75rem 0 0.75rem 1.5rem; line-height: 1.8;">
+                <li><strong>a)</strong> Indicação de <em>"PERIGO"</em> ou <em>"ATENÇÃO"</em> e <em>"RISCO DE ARCO ELÉTRICO E CHOQUE"</em>;</li>
+                <li><strong>b)</strong> Energia incidente calculada para o ponto em questão em cal/cm² (e J/cm²);</li>
+                <li><strong>c)</strong> Distância de trabalho considerada no estudo (mm / cm);</li>
+                <li><strong>d)</strong> Limite de aproximação segura (Fronteira de Arco Elétrico DLA / AFB);</li>
+                <li><strong>e)</strong> TAG do equipamento;</li>
+                <li><strong>f)</strong> Nível de tensão (Voc);</li>
+                <li><strong>g)</strong> EPI indicados para proteção (ATPV mínimo, vestimentas, protetores faciais);</li>
+                <li><strong>h)</strong> Limites de Choque Elétrico (Zona de Risco e Zona Controlada conforme NR-10);</li>
+                <li><strong>i)</strong> Idioma em português e dimensões visíveis além do limite de aproximação segura.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         ABA 5: CENTRAL DE AJUDA & GLOSSÁRIO TÉCNICO (NBR 17227:2025)
+         ===================================================================== -->
+    <section class="tab-pane" id="tab-ajuda">
+      <div class="help-container">
+        
+        <!-- Hero da Central de Ajuda -->
+        <div class="help-hero">
+          <div class="help-hero-content">
+            <div class="help-hero-title">
+              <h2>
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#38bdf8" stroke-width="2.2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                <span>Central de Ajuda & Glossário Técnico</span>
+              </h2>
+              <p>Guia prático, fundamentação teórica e referências normativas da ABNT NBR 17227:2025 e NR-10 para todos os parâmetros de cálculo, proteções e sinalização de segurança.</p>
+            </div>
+            
+            <!-- Barra de Busca Rápida -->
+            <div class="help-search-bar">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#38bdf8" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" id="help-search-input" class="help-search-input" placeholder="Buscar por parâmetro (ex: Voc, Ibf, tempo, eletrodos, gap, ATPV)...">
+            </div>
+          </div>
+
+          <!-- Filtros Rápidos por Categoria -->
+          <div class="help-filter-pills">
+            <button type="button" class="help-pill-btn active" data-filter="all">Todos os Tópicos</button>
+            <button type="button" class="help-pill-btn" data-filter="eletrico">⚡ Parâmetros Elétricos</button>
+            <button type="button" class="help-pill-btn" data-filter="protecao">⏱️ Proteção & Tempos</button>
+            <button type="button" class="help-pill-btn" data-filter="geometria">📐 Geometria & Invólucro</button>
+            <button type="button" class="help-pill-btn" data-filter="resultados">🛡️ Resultados & EPIs</button>
+          </div>
+        </div>
+
+        <!-- Grid de Tópicos Detalhados -->
+        <div class="help-topics-grid">
+
+          <!-- TAG -->
+          <div class="help-card" id="help-tag" data-category="eletrico">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">TAG</div>
+                <div>
+                  <h3 class="help-card-title">TAG do Equipamento</h3>
+                  <span class="help-card-norma">Seção 7 • Item 7.2-e</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Identificador unívoco do painel, centro de controle de motores (CCM) ou cubículo no projeto elétrico.</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">Aplicação no Estudo</span>
+              <span class="help-card-box-value">O TAG é impresso na etiqueta de advertência de arco elétrico, no laudo pericial e na planilha de engenharia, garantindo rastreabilidade jurídica conforme NR-10 e ABNT NBR 17227.</span>
+            </div>
+            <div class="help-card-tip">💡 Mantenha a mesma identificação física afixada na porta do painel e no diagrama unifilar.</div>
+          </div>
+
+          <!-- Descrição / Local -->
+          <div class="help-card" id="help-desc" data-category="eletrico">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">LOC</div>
+                <div>
+                  <h3 class="help-card-title">Descrição / Local da Instalação</h3>
+                  <span class="help-card-norma">Identificação Operacional</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Nome descritivo e localização física do equipamento dentro da planta industrial, comercial ou predial.</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">Exemplos Recomendados</span>
+              <span class="help-card-box-value">"Subestação Principal SE-01 — Sala de BT", "Casa de Bombas de Incêndio — CCM-03", "Prédio Administrativo — QGBT Geral".</span>
+            </div>
+            <div class="help-card-tip">💡 Permite que equipes de manutenção e brigadistas identifiquem imediatamente o compartimento correto.</div>
+          </div>
+
+          <!-- Voc -->
+          <div class="help-card" id="help-voc" data-category="eletrico">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">Voc</div>
+                <div>
+                  <h3 class="help-card-title">Tensão Nominal (Tensão de Circuito Aberto)</h3>
+                  <span class="help-card-norma">Seção 5.1.2 • Faixa 208 V a 15 000 V</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Tensão eficaz nominal fase-fase (tensão de linha) sob a qual o painel opera normalmente.</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">Modelo Matemático da Norma</span>
+              <span class="help-card-box-value">Para 208 V ≤ Voc ≤ 600 V: o modelo empírico calcula a corrente de arco Iarc diretamente. Para 600 V &lt; Voc ≤ 15 000 V: a norma calcula pontos de referência a 600 V, 2 700 V e 14 300 V e realiza interpolação polinomial de 2º grau.</span>
+            </div>
+            <div class="help-card-tip">⚠️ Sempre utilize a tensão eficaz fase-fase. Para sistemas monofásicos (ex: fase-terra), consulte o item 5.2.12 da norma.</div>
+          </div>
+
+          <!-- Ibf -->
+          <div class="help-card" id="help-ibf" data-category="eletrico">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">Ibf</div>
+                <div>
+                  <h3 class="help-card-title">Curto-Circuito Franco Trifásico (Bolted Fault)</h3>
+                  <span class="help-card-norma">Seção 5.1.3 • Faixa 0,5 kA a 106 kA</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Corrente simétrica eficaz inicial de curto-circuito sólido trifásico (sem arco) no ponto de instalação do equipamento.</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">Como Obter o Dado</span>
+              <span class="help-card-box-value">Extraída do Estudo de Curto-Circuito da planta (software como PTW, ETAP, EasyPower ou cálculo manual por Thévenin). Depende da potência de curto da concessionária, impedância de transformadores e contribuição de motores.</span>
+            </div>
+            <div class="help-card-tip">💡 Quanto maior o Ibf, maior a energia do arco; porém, Ibf elevado pode fazer o disjuntor desarmar mais rápido.</div>
+          </div>
+
+          <!-- Tempo T -->
+          <div class="help-card" id="help-time" data-category="protecao">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">T</div>
+                <div>
+                  <h3 class="help-card-title">Tempo de Eliminação Nominal da Falta</h3>
+                  <span class="help-card-norma">Seção 5.2.10 • Proporcional à Energia</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Duração total do arco elétrico em segundos (s) quando a corrente for a corrente de arco nominal (Iarc).</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">Composição do Tempo</span>
+              <span class="help-card-box-value">T = Tempo de sensibilidade do relé (ou fusível) + Tempo mecânico total de abertura e extinção do disjuntor. A energia incidente cresce de forma diretamente proporcional ao tempo (E ∝ t).</span>
+            </div>
+            <div class="help-card-tip">⚠️ Tempos acima de 2,0 s devem acionar o limite de tempo de fuga do operador ou exigir ajustes de seletividade.</div>
+          </div>
+
+          <!-- Tempo Iarc Mínima (Cenário Governante) -->
+          <div class="help-card" id="help-reduced-time" data-category="protecao">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">T_min</div>
+                <div>
+                  <h3 class="help-card-title">Tempo para Iarc Mínima & Cenário Governante</h3>
+                  <span class="help-card-norma">Seção 5.2.11 • Obrigatório por Norma</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Tempo de atuação da proteção considerando a Corrente de Arco Reduzida (Iarc_min = Iarc × [1 - 0.5 × VarCf]).</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">O Paradoxo da Energia Incidente</span>
+              <span class="help-card-box-value">O arco elétrico real pode ter corrente menor que a nominal. Porém, com corrente menor, o disjuntor a montante pode sair do disparo instantâneo (50) e cair na curva temporizada (51), demorando muito mais tempo. Como E = P × t, o Cenário 2 pode gerar energia MUITO MAIOR que o Cenário 1! A norma exige adotar o pior caso (Cenário Governante).</span>
+            </div>
+            <div class="help-card-tip">💡 Se ambas as correntes caírem na unidade instantânea sem atraso intencional, mantenha a opção "Usar mesmo tempo".</div>
+          </div>
+
+          <!-- Configuração dos Eletrodos -->
+          <div class="help-card" id="help-electrodes" data-category="geometria">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">ELET</div>
+                <div>
+                  <h3 class="help-card-title">Configurações de Eletrodos (Tabela 2)</h3>
+                  <span class="help-card-norma">VCB • VCBB • HCB • VOA • HOA</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Classificação física do posicionamento dos barramentos condutores e confinamento térmico:</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">Resumo dos 5 Modelos</span>
+              <span class="help-card-box-value">
+                • <strong>VCB:</strong> Vertical em Caixa Fechada. Plasma refletido para fora. Padrão de CCMs.<br>
+                • <strong>VCBB:</strong> Vertical com Barreira Isolante. Plasma impedido de descer; alta energia frontal.<br>
+                • <strong>HCB:</strong> Horizontal em Caixa. Força de Lorentz ejeta jato de plasma contra o operador.<br>
+                • <strong>VOA:</strong> Vertical ao Ar Livre. Sem invólucro (CF=1). Dispersão tridimensional.<br>
+                • <strong>HOA:</strong> Horizontal ao Ar Livre. Dispersão aberta com efeito axial de Lorentz.
+              </span>
+            </div>
+            <div class="help-card-tip">💡 Para inspecionar diagramas animados de cada configuração, passe o mouse sobre os cards na Calculadora.</div>
+          </div>
+
+          <!-- Espaçamento Típico da Norma -->
+          <div class="help-card" id="help-preset" data-category="geometria">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">PRE</div>
+                <div>
+                  <h3 class="help-card-title">Espaçamentos Típicos da Norma</h3>
+                  <span class="help-card-norma">Tabela 1 e Tabela 3 da NBR 17227:2025</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Dimensões geométricas padronizadas pela norma para os invólucros industriais mais comuns.</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">O que o Preset Altera</span>
+              <span class="help-card-box-value">Preenche automaticamente o Gap entre barramentos, a distância de trabalho e as medidas de Largura, Altura e Profundidade do compartimento. <strong>Não altera a tensão nominal</strong> preenchida pelo engenheiro.</span>
+            </div>
+            <div class="help-card-tip">💡 Utilize quando não tiver em mãos as medidas milimétricas internas exatas do compartimento do cubículo.</div>
+          </div>
+
+          <!-- Gap G -->
+          <div class="help-card" id="help-gap" data-category="geometria">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">Gap</div>
+                <div>
+                  <h3 class="help-card-title">Espaçamento entre Eletrodos (Gap G)</h3>
+                  <span class="help-card-norma">Seção 5.1.4 • Tabela 1</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Distância física de separação entre partes condutoras energizadas de fases diferentes em milímetros (mm).</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">Valores e Limites Normativos</span>
+              <span class="help-card-box-value">
+                • Baixa Tensão (208 V - 600 V): Típico 25,0 mm a 32,0 mm (mín. 6,35 mm, máx. 254 mm).<br>
+                • Média Tensão (601 V - 15 000 V): Típico 104,0 mm a 152,0 mm.<br>
+                Gaps maiores aumentam a tensão do arco e modificam a corrente Iarc.
+              </span>
+            </div>
+            <div class="help-card-tip">💡 Pode ser medido com o painel desenergizado ou consultado no catálogo técnico do fabricante.</div>
+          </div>
+
+          <!-- Distância de Trabalho D -->
+          <div class="help-card" id="help-working-dist" data-category="geometria">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">Dist D</div>
+                <div>
+                  <h3 class="help-card-title">Distância de Trabalho (D)</h3>
+                  <span class="help-card-norma">Seção 5.1.7 • Tabela 3</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Distância em milímetros (mm) entre o ponto provável de início do arco elétrico e a cabeça/tronco do trabalhador.</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">Valores de Referência</span>
+              <span class="help-card-box-value">
+                • Painéis BT / CCMs: 457,2 mm (18 polegadas).<br>
+                • Cubículos de MT / Painéis de comando: 610 mm (24 pol) a 914 mm (36 pol).<br>
+                A energia incidente decai aproximadamente com o inverso do quadrado da distância: afastar-se reduz drasticamente a severidade térmica!
+              </span>
+            </div>
+            <div class="help-card-tip">⚠️ A distância de trabalho adotada no cálculo DEVE ser impressa na placa de advertência (Item 7.2-c).</div>
+          </div>
+
+          <!-- Invólucro e Fator CF -->
+          <div class="help-card" id="help-enclosure" data-category="geometria">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">CF</div>
+                <div>
+                  <h3 class="help-card-title">Dimensões do Invólucro & Fator de Confinamento (CF)</h3>
+                  <span class="help-card-norma">Seção 5.1.5 e 5.2.8</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Dimensões internas de Largura (L), Altura (A) e Profundidade (P) do compartimento em milímetros.</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">Como o CF Afeta a Energia</span>
+              <span class="help-card-box-value">O Fator de Invólucro (CF) quantifica o efeito de confinamento e reflexão térmica das paredes metálicas. Painéis compactos e rasos concentram a onda térmica na abertura frontal (CF > 1.0), amplificando a energia incidente recebida pelo operador.</span>
+            </div>
+            <div class="help-card-tip">💡 Se a profundidade for superior a 1 244 mm, a norma trunca o cálculo no limite saturado de 1 244 mm.</div>
+          </div>
+
+          <!-- Corrente Contínua C.C. -->
+          <div class="help-card" id="help-dc" data-category="eletrico">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">C.C.</div>
+                <div>
+                  <h3 class="help-card-title">Sistemas de Corrente Contínua (Até 1500 Vcc)</h3>
+                  <span class="help-card-norma">Seção 5.4 • Baterias & Fotovoltaico</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Metodologia específica para bancos de baterias, nobreaks/UPS industriais e usinas solares fotovoltaicas.</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">Particularidades do Arco C.C.</span>
+              <span class="help-card-box-value">Em corrente contínua não há passagem natural por zero da corrente, tornando a extinção do arco dependente do estiramento do arco e da abertura dos fusíveis ou disjuntores ultra-rápidos C.C. A norma utiliza a constante de tempo L/R para determinar o decaimento da corrente transitória.</span>
+            </div>
+            <div class="help-card-tip">💡 Utilize a tensão nominal do banco de baterias em carga de flutuação e a corrente de curto no barramento de C.C.</div>
+          </div>
+
+          <!-- Resultados e Categorias de EPI -->
+          <div class="help-card" id="help-results" data-category="resultados">
+            <div class="help-card-header">
+              <div class="help-card-title-group">
+                <div class="help-card-icon">EPI</div>
+                <div>
+                  <h3 class="help-card-title">Interpretação dos Resultados & ATPV de EPIs</h3>
+                  <span class="help-card-norma">Tabela 4 da NBR 17227:2025 • NR-10</span>
+                </div>
+              </div>
+            </div>
+            <p class="help-card-desc">Classificação de risco, categorias de vestimentas de proteção térmica e limites de aproximação segura:</p>
+            <div class="help-card-box">
+              <span class="help-card-box-label">Categorias Normativas (Tabela 4)</span>
+              <span class="help-card-box-value">
+                • <strong>Categoria 1:</strong> ATPV ≥ 4 cal/cm² (16,75 J/cm²).<br>
+                • <strong>Categoria 2:</strong> ATPV ≥ 8 cal/cm² (33,50 J/cm²).<br>
+                • <strong>Categoria 3:</strong> ATPV ≥ 25 cal/cm² (104,70 J/cm²).<br>
+                • <strong>Categoria 4:</strong> ATPV ≥ 40 cal/cm² (167,50 J/cm²).<br>
+                • <strong>Extremo (&gt; 40 cal/cm²):</strong> Trabalho energizado proibido! Exige desenergização prévia.
+              </span>
+            </div>
+            <div class="help-card-tip">🛡️ O ATPV das vestimentas e do capuz balaclava com protetor facial deve ser sempre IGUAL OU SUPERIOR à energia incidente resultante calculada.</div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Janela Flutuante / Popover Informativo de Configuração dos Eletrodos (Filho direto de body para posição fixa perfeita) -->
+  <div id="electrode-popover" class="electrode-popover" style="display:none;" aria-live="polite">
+    <div class="epop-header">
+      <div class="epop-code" id="epop-code">VCB</div>
+      <div class="epop-title" id="epop-title">Vertical — Condutores em Caixa</div>
+      <button class="epop-close" id="epop-close" title="Fechar janela flutuante">✕</button>
+    </div>
+    <div class="epop-diagram" id="epop-diagram"></div>
+    <div class="epop-desc" id="epop-desc"></div>
+    <div class="epop-hazard" id="epop-hazard"></div>
+  </div>
+
+  <!-- Janela Flutuante / Popover de Ajuda de Parâmetros (Filho direto de body para posição fixa perfeita e fundo 100% opaco) -->
+  <div id="param-help-popover" class="param-help-popover" style="display:none;" aria-live="polite">
+    <div class="phpop-header">
+      <div class="phpop-badge" id="phpop-badge">Voc</div>
+      <div class="phpop-title" id="phpop-title">Tensão Nominal</div>
+      <button class="phpop-close" id="phpop-close" title="Fechar janela de ajuda">✕</button>
+    </div>
+    <div class="phpop-body">
+      <div class="phpop-summary" id="phpop-summary"></div>
+      <div class="phpop-detail" id="phpop-detail"></div>
+      <div class="phpop-tip" id="phpop-tip"></div>
+    </div>
+    <div class="phpop-footer">
+      <button type="button" class="phpop-more-btn" id="phpop-more-btn">
+        <span>📖 Saiba mais na Central de Ajuda</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       Scripts da Aplicação
+       ======================================================================= -->
+  <!-- Bibliotecas Locais (Suporte Total Offline) -->
+  <script src="libs/xlsx.full.min.js"></script>
+  <script src="libs/html2canvas.min.js"></script>
+
+  <!-- Módulos de Cálculo e Regras da Norma NBR 17227:2025 -->
+  <script src="js/app.min.js"></script>
+</body>
+</html>
