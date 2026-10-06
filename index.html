@@ -11,7 +11,7 @@
   <link rel="alternate icon" href="favicon.svg" type="image/svg+xml">
 
   <!-- Políticas de Segurança do Conteúdo e Proteção de Cabeçalho -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: file:; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: file:; style-src 'self' 'unsafe-inline' data: file:; img-src 'self' data: blob: file:; font-src 'self' data: file:; connect-src 'self' data: blob: file:; object-src 'none'; base-uri 'self'; form-action 'self';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob: file:; script-src 'self' 'unsafe-inline' data: blob: file:; style-src 'self' 'unsafe-inline' data: file:; img-src 'self' data: blob: file:; font-src 'self' data: file:; connect-src 'self' data: blob: file:; object-src 'none';">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
@@ -82,29 +82,10 @@
           <span>Central de Ajuda</span>
         </button>
 
-        <button class="tab-btn" data-tab="auditoria" id="btn-tab-auditoria">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <path d="m9 12 2 2 4-4"/>
-          </svg>
-          <span>Auditoria & Testes</span>
-        </button>
       </nav>
 
       <!-- Ações do Cabeçalho -->
       <div class="navbar-actions">
-        <!-- Classificação Técnica: Rascunho vs Validado -->
-        <div class="study-mode-pill" id="study-mode-pill" title="Classificação técnica de integridade do estudo">
-          <button type="button" class="mode-pill-btn active" id="btn-mode-draft" data-mode="draft">
-            <span class="mode-dot dot-draft"></span>
-            <span>Rascunho</span>
-          </button>
-          <button type="button" class="mode-pill-btn" id="btn-mode-validated" data-mode="validated">
-            <span class="mode-dot dot-validated"></span>
-            <span>Validado</span>
-          </button>
-        </div>
-
         <button class="btn-icon" id="theme-toggle-btn" title="Alternar Modo Escuro / Claro" aria-label="Alternar tema">
           <span id="theme-icon">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
@@ -528,22 +509,6 @@
             </div>
           </div>
 
-          <!-- Validação Semântica, Física e Normativa (Item 7 da Auditoria) -->
-          <div class="normative-card" id="normative-validation-card">
-            <div class="normative-header">
-              <div class="normative-title">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span>Consistência Física & Normativa</span>
-              </div>
-              <span class="normative-status-badge status-valid" id="normative-status-badge">100% Conforme</span>
-            </div>
-            <div class="normative-issues-list" id="normative-issues-list">
-              <div class="normative-issue-item issue-info">
-                <span>Parâmetros dentro das faixas empíricas da ABNT NBR 17227:2025 e IEEE Std 1584-2018.</span>
-              </div>
-            </div>
-          </div>
-
           <!-- Réguas de Choque Elétrico (NR-10) -->
           <div class="shock-card">
             <div class="scenario-title">
@@ -560,34 +525,6 @@
               <div>Zona de Risco: <strong id="shock-risk-dist">0.20 m</strong></div>
               <div>Zona Controlada: <strong id="shock-ctrl-dist">0.70 m</strong></div>
               <div>Luva Isolante: <strong id="shock-glove-class">Classe 00</strong></div>
-            </div>
-          </div>
-
-          <!-- Rastreabilidade, Trilha de Auditoria e Hash Criptográfico (Itens 1, 10, 12) -->
-          <div class="audit-tracking-card" id="calc-audit-card">
-            <div class="audit-card-header">
-              <div class="audit-header-left">
-                <span class="audit-card-title">Rastreabilidade & Integridade</span>
-                <span class="audit-id-badge" id="calc-study-id">ARC-2026-000000</span>
-              </div>
-              <span class="audit-mode-tag tag-draft" id="calc-study-mode-tag">RASCUNHO</span>
-            </div>
-            <div class="audit-card-body">
-              <div class="audit-info-row">
-                <span>Base Normativa:</span>
-                <strong>ABNT NBR 17227:2025 • IEEE 1584-2018</strong>
-              </div>
-              <div class="audit-info-row">
-                <span>Motor Matemático:</span>
-                <strong>Engine v1.4.2 (Execução Local Client-Side)</strong>
-              </div>
-              <div class="audit-hash-row">
-                <span>Hash SHA-256 das Entradas:</span>
-                <code id="calc-study-hash" title="Hash criptográfico dos parâmetros deste cálculo">Calculando hash...</code>
-              </div>
-              <div class="audit-disclaimer-note">
-                ℹ️ <em>Cálculo computado no navegador. Não equivale a laudo oficial sem conferência e ART assinada por Engenheiro Eletricista habilitado (NR-10).</em>
-              </div>
             </div>
           </div>
 
@@ -764,7 +701,6 @@
           <div class="form-group">
             <label class="form-label" for="meta-company">
               <span>Empresa / Unidade Fabril</span>
-              <span class="required-tag" title="Obrigatório para estudo validado">*</span>
             </label>
             <input type="text" class="form-input" id="meta-company" value="" placeholder="Ex: Nome da Empresa / Instalação">
           </div>
@@ -772,7 +708,6 @@
           <div class="form-group">
             <label class="form-label" for="meta-engineer">
               <span>Responsável Técnico</span>
-              <span class="required-tag" title="Obrigatório para estudo validado">*</span>
             </label>
             <input type="text" class="form-input" id="meta-engineer" value="" placeholder="Ex: Eng. Fulano de Tal (Eletricista)">
           </div>
@@ -780,7 +715,6 @@
           <div class="form-group">
             <label class="form-label" for="meta-crea">
               <span>Registro Profissional (CREA/RNP)</span>
-              <span class="required-tag" title="Obrigatório para estudo validado">*</span>
             </label>
             <input type="text" class="form-input" id="meta-crea" value="" placeholder="Ex: CREA 123456/D ou RNP 00000000-0">
           </div>
@@ -1455,237 +1389,6 @@
               </span>
             </div>
             <div class="help-card-tip">🛡️ O ATPV das vestimentas e do capuz balaclava com protetor facial deve ser sempre IGUAL OU SUPERIOR à energia incidente resultante calculada.</div>
-          </div>
-
-        </div>
-
-      </div>
-    <!-- =======================================================================
-         ABA 6: AUDITORIA, INTEGRIDADE NORMATIVA & SEGURANÇA
-         ======================================================================= -->
-    <section class="tab-pane" id="tab-auditoria">
-      <div class="audit-layout">
-        
-        <!-- Header do Painel -->
-        <div class="audit-header-banner">
-          <div class="audit-header-info">
-            <div class="audit-shield-icon">
-              <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                <path d="m9 12 2 2 4-4"/>
-              </svg>
-            </div>
-            <div>
-              <h2 class="audit-header-title">Auditoria de Integridade & Segurança Normativa</h2>
-              <p class="audit-header-subtitle">Validação automatizada contra casos de referência IEEE 1584-2018 / ABNT NBR 17227:2025, rastreabilidade criptográfica e cadeia de suprimentos.</p>
-            </div>
-          </div>
-          <div class="audit-status-badge">
-            <span class="dot"></span>
-            <span>Motor v1.4.2 • ABNT NBR 17227:2025</span>
-          </div>
-        </div>
-
-        <!-- Seção 1: Bateria de Testes Automatizados (Golden Tests) -->
-        <div class="audit-card">
-          <div class="audit-card-header">
-            <div class="audit-card-title-group">
-              <div class="audit-card-icon">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                  <polyline points="14 2 14 8 20 8"/>
-                  <path d="m9 15 2 2 4-4"/>
-                </svg>
-              </div>
-              <h3 class="audit-card-title">Casos de Referência Normativos (Golden Tests Automatizados)</h3>
-            </div>
-            <button type="button" class="btn-run-tests" id="btn-run-golden-tests">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="5 3 19 12 5 21 5 3"/>
-              </svg>
-              <span>Executar Bateria de Testes</span>
-            </button>
-          </div>
-          <p class="audit-card-desc">
-            Executa a verificação dos cálculos do motor matemático contra os valores analíticos de referência publicados no <strong>IEEE Std 1584-2018 (Anexo D)</strong> e na <strong>ABNT NBR 17227:2025</strong> para todas as configurações de eletrodos (VCB, VCBB, HCB, VOA, HOA) em baixa e média tensão. Critério de aprovação: erro relativo ≤ 0,5%.
-          </p>
-
-          <div class="golden-tests-summary">
-            <div class="summary-metric-box">
-              <span class="metric-label">Total de Casos</span>
-              <span class="metric-value" id="test-total-count">-</span>
-            </div>
-            <div class="summary-metric-box">
-              <span class="metric-label">Aprovados</span>
-              <span class="metric-value val-passed" id="test-passed-count">-</span>
-            </div>
-            <div class="summary-metric-box">
-              <span class="metric-label">Reprovados</span>
-              <span class="metric-value val-failed" id="test-failed-count">-</span>
-            </div>
-            <div class="summary-metric-box">
-              <span class="metric-label">Tolerância Aceita</span>
-              <span class="metric-value" style="font-size: 1.15rem; color: var(--accent-cyan);">± 0,5%</span>
-            </div>
-          </div>
-
-          <div class="golden-table-wrap">
-            <table class="golden-table" id="golden-test-table">
-              <thead>
-                <tr>
-                  <th>Caso / Fonte</th>
-                  <th>Config</th>
-                  <th>Voc (kV)</th>
-                  <th>Ibf (kA)</th>
-                  <th>Gap (mm)</th>
-                  <th>Dist (mm)</th>
-                  <th>Iarc (kA) [Esp / Obt]</th>
-                  <th>Energia (cal/cm²) [Esp / Obt]</th>
-                  <th>AFB (m) [Esp / Obt]</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="golden-test-tbody">
-                <tr>
-                  <td colspan="10" style="text-align: center; color: var(--text-muted); padding: 2rem;">
-                    Clique em "Executar Bateria de Testes" para auditar o motor matemático em tempo real.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Seção 2: Cadeia de Suprimentos & Inventário de Dependências -->
-        <div class="audit-card">
-          <div class="audit-card-header">
-            <div class="audit-card-title-group">
-              <div class="audit-card-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-                  <line x1="12" y1="22.08" x2="12" y2="12"/>
-                </svg>
-              </div>
-              <h3 class="audit-card-title">Inventário de Dependências & Segurança da Cadeia de Suprimentos (Supply Chain)</h3>
-            </div>
-            <span class="audit-status-badge">
-              <span class="dot"></span>
-              <span>100% Offline • Zero Telemetria</span>
-            </span>
-          </div>
-          <p class="audit-card-desc">
-            Todas as bibliotecas de terceiros estão congeladas em versões estáveis auditadas e armazenadas localmente no diretório <code>libs/</code>, eliminando riscos de CDN poisoning, dependências fantasmas e tráfego não autorizado.
-          </p>
-
-          <div class="dep-table-wrap">
-            <table class="dep-table">
-              <thead>
-                <tr>
-                  <th>Componente</th>
-                  <th>Versão</th>
-                  <th>Finalidade</th>
-                  <th>Licença</th>
-                  <th>Origem & Risco Mitigado</th>
-                  <th>Hash SHA-256 Auditado</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>SheetJS (xlsx)</strong></td>
-                  <td>0.18.5</td>
-                  <td>Exportação de relatórios Excel (.xlsx)</td>
-                  <td>Apache-2.0</td>
-                  <td>Local <code>libs/xlsx.full.min.js</code>. Aplicação apenas <em>escreve</em> planilhas; não há parsing de planilhas não confiáveis de terceiros.</td>
-                  <td><span class="hash-code">C9506197CAF809A075B6DEE1DA0D36FB19DA7158FFE8A88E7B0C96C5D8623C99</span></td>
-                </tr>
-                <tr>
-                  <td><strong>html2canvas</strong></td>
-                  <td>1.4.1</td>
-                  <td>Renderização rasterizada das placas de segurança em PNG (300 DPI)</td>
-                  <td>MIT</td>
-                  <td>Local <code>libs/html2canvas.min.js</code>. Executado exclusivamente em contexto de canvas estático.</td>
-                  <td><span class="hash-code">E87E550794322E574A1FDA0C1549A3C70DAE5A93D9113417A429016838EAB8CB</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Seção 3: Informações Técnicas de Governança, Rastreabilidade e Privacidade -->
-        <div class="audit-info-grid">
-          
-          <!-- Rastreabilidade Criptográfica -->
-          <div class="audit-info-box">
-            <h4>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#3b82f6" stroke-width="2">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-              <span>Rastreabilidade & Hash SHA-256</span>
-            </h4>
-            <p>
-              Cada cálculo no ArcShield gera um identificador único de estudo (ex: <code>ARC-2026-XXXXXX</code>) e um hash criptográfico SHA-256 calculado canonicamente a partir da tupla determinística de parâmetros:
-            </p>
-            <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-cyan); background: rgba(0,0,0,0.25); padding: 0.4rem; border-radius: 4px;">
-              SHA-256(Voc | Ibf | t | G | D | CF | Ecal | Dla | AlgVer)
-            </p>
-            <p>
-              Qualquer adulteração posterior de dados em relatórios ou planilhas invalida o hash, permitindo a verificação de integridade entre partes técnicas.
-            </p>
-          </div>
-
-          <!-- Separação Rascunho vs Validado -->
-          <div class="audit-info-box">
-            <h4>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#f59e0b" stroke-width="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
-              <span>Rascunho vs. Validado</span>
-            </h4>
-            <p>
-              Para evitar confusão entre simulações preliminares e estudos de engenharia homologados:
-            </p>
-            <ul class="audit-check-list">
-              <li><span class="check">•</span> <strong>Modo Rascunho:</strong> Etiqueta recebe marca d'água "SIMULAÇÃO PRELIMINAR • NÃO HOMOLOGADO", alertando que dados não foram revisados.</li>
-              <li><span class="check">•</span> <strong>Modo Validado:</strong> Exige ausência de pendências semânticas e dados reais do Responsável Técnico (CREA/RNP), aplicando o selo de auditoria.</li>
-              <li><span class="check">•</span> <strong>Sem Placeholders Fictícios:</strong> Dados de exemplo não são mais inseridos como definitivos.</li>
-            </ul>
-          </div>
-
-          <!-- Privacidade & LGPD -->
-          <div class="audit-info-box">
-            <h4>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#10b981" stroke-width="2">
-                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
-                <path d="M12 6v6l4 2"/>
-              </svg>
-              <span>Privacidade & LGPD</span>
-            </h4>
-            <p>
-              O ArcShield opera sob arquitetura <em>zero-knowledge</em> do lado do cliente:
-            </p>
-            <ul class="audit-check-list">
-              <li><span class="check">✓</span> Nenhum dado de subestação, empresa ou responsável técnico sai do computador.</li>
-              <li><span class="check">✓</span> Sem cookies de rastreamento, Google Analytics ou telemetria.</li>
-              <li><span class="check">✓</span> Logomarcas enviadas são sanitizadas e rasterizadas em memória local.</li>
-              <li><span class="check">✓</span> Arquivo de segurança publicado em <code>/.well-known/security.txt</code>.</li>
-            </ul>
-          </div>
-
-          <!-- Isenção e Responsabilidade Técnica -->
-          <div class="audit-info-box">
-            <h4>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#8b5cf6" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="16" x2="12" y2="12"/>
-                <line x1="12" y1="8" x2="12.01" y2="8"/>
-              </svg>
-              <span>Responsabilidade Técnica (ART)</span>
-            </h4>
-            <p>
-              O ArcShield é uma ferramenta computacional de auxílio ao cálculo de engenharia. A interpretação física, parametrização dos relés de proteção e a assinatura dos laudos e placas de advertência competem privativamente ao Engenheiro Eletricista com emissão de Anotação de Responsabilidade Técnica (ART) nos termos da Lei nº 5.194/1966 e NR-10.
-            </p>
           </div>
 
         </div>
